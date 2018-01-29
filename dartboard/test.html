@@ -53,46 +53,9 @@
 
 
 
-					scoreBoard.InitScoreBoard();
+					//scoreBoard.InitScoreBoard();
+					scoreBoard.InitializeScoreBoard();
 					
-
-					function drawLines(){
-						/*for(i = 0; i < images.length; i++){
-							ctx.drawImage(images[i], 0, 0);
-						}*/
-						startPos = 117;
-						vSpacer = 30;
-
-						ctx.drawImage(background, 0, 0);
-
-						ctx.drawImage(title, 20, 0);
-
-						ctx.drawImage(lines[0],13 + (w/3 - 10),90,lines[0].width,lines[0].height - 90);
-						ctx.drawImage(lines[0],13 + 2 * (w/3 - 10),90,lines[0].width,lines[0].height - 90);
-						ctx.drawImage(lines[2], 0, (startPos + 0 * vSpacer));
-						ctx.drawImage(h_box, -5, (startPos + 1 * vSpacer), 50,50);
-			/*			ctx.drawImage(t_box, -1, (startPos + 5 * vSpacer), 46,46);
-						ctx.drawImage(g_box, 2, (startPos + 8.5 * vSpacer), 40,40);*/
-						ctx.drawImage(lines[3], 0, (startPos + 1 * vSpacer));
-						ctx.drawImage(lines[3], 0, (startPos + 2 * vSpacer));
-						ctx.drawImage(lines[2], 0, (startPos + 3 * vSpacer));/*
-						ctx.drawImage(lines[2], 0, (startPos + 4 * vSpacer));
-						ctx.drawImage(lines[3], 0, (startPos + 5 * vSpacer));
-						ctx.drawImage(lines[3], 0, (startPos + 6 * vSpacer));
-						ctx.drawImage(lines[2], 0, (startPos + (7 * vSpacer) + 1));
-						ctx.drawImage(lines[1], 5, (startPos + 8 * vSpacer + 5));
-						ctx.drawImage(lines[1], 5, (startPos + 9 * vSpacer + 17));
-*/
-						//ctx.drawImage(lines[3], 0, startPos);
-						
-
-						
-						//draw a box over the top
-						//ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
-						//ctx.fillRect(0, 0, 500, 500);
-						drawNames();
-						InitCells();
-					};	
 
 					function drawNames(){
 						ctx.font = "25px Comic Sans MS";
@@ -104,16 +67,18 @@
 						ctx.strokeRect(0 + ctx.lineWidth / 2,0 + ctx.lineWidth / 2,w - ctx.lineWidth / 2,h - ctx.lineWidth / 2);
 					}
 
+
+					//TODO move to scoreboard
 					function InitCells(){
 						startPosY = 98;
 						startPosX = 20;
 						width = w/3 - 10;
-						height = vSpacer - 1;
+						height = scoreBoard.vSpacer - 1;
 
 						for(var i = 0; i < players.length; i++){
 							var rows = [];
 							for(var j = 0; j < 10; j++){
-								var cell = new Cell(width, vSpacer, startPosX + i*(width), startPosY + j * (height + 1));
+								var cell = new Cell(i + "_" + j, width, scoreBoard.vSpacer, startPosX + i*(width), startPosY + j * (height + 1));
 								//cell.ctx.strokeRect(0,0,width,height);
 								
 								rows.push(cell);
@@ -123,7 +88,6 @@
 							scoreBoard.cells[i][0].SetText(players[i]);
 							scoreBoard.cells[i][0].UpdateCell(ctx);
 						}
-
 
 						//DEBUG
 						for(var i = 0; i < 3; i++){
@@ -143,61 +107,75 @@
 						this.imageNames = ["background", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3"];
 						this.lines = {};
 						this.counter = Object.keys(this.imageNames).length;
-						
+						this.startPos = 115;
+						this.vSpacer = 30;
 
-						this.InitScoreBoard = function(){
-							for(i in this.imageNames){
-								img = new Image();
-								img.src = 'img/scoreboard/' + this.imageNames[i] + '.png';
-								img.id = this.imageNames[i];+
-								img.addEventListener("load", CountImages());
 
+						this.InitializeScoreBoard = function(){
+							for(var i in this.imageNames){
+								var img = new Image;
+								img.onload = CountImages;
+								img.src = "img/scoreboard/" + this.imageNames[i] + ".png";
+								
 								this.images.push(img);
 							}
 						}
 
-						
-
 						this.DrawScoreBoard = function(){
-							startPos = 117;
-							vSpacer = 30;
+							this.DrawImage("background", 0, 0);
+							this.DrawImage("title", 20, 0);
 
-							for(i = 0; i < this.images.length; i++){
-								console.log(this.images[i].src);
-								ctx.drawImage(this.images[i], 0, 0);
-							}
+							this.DrawImage("lv1", 13 + (w/3 - 10),90,this.GetImage("lv1").width,this.GetImage("lv1").height - 90);
+							this.DrawImage("lv1", 13 + 2 * (w/3 - 10),90,this.GetImage("lv1").width,this.GetImage("lv1").height - 90);
 
-							//console.log(this.images['background'].src);
+							this.DrawImage("lh2", 0, (this.startPos + 2 + 0 * this.vSpacer));
+							this.DrawImage("h_box", -5, (this.startPos + 1 * this.vSpacer), 50,50);
+							this.DrawImage("t_box", -1, (this.startPos + 5 * this.vSpacer), 46,46);
+							this.DrawImage("g_box", 2, (this.startPos + 8.5 * this.vSpacer), 40,40);
 
-							
-
-							/*ctx.drawImage(this.images['lv1'],13 + (w/3 - 10),90,this.images['lv1'].width,this.images['lv1'].height - 90);
-							ctx.drawImage(this.images['lv1'],13 + 2 * (w/3 - 10),90,this.images['lv1'].width,this.images['lv1'].height - 90);
-							ctx.drawImage(this.images['lh2'], 0, (startPos + 0 * vSpacer));
-							ctx.drawImage(this.images['h_box'], -5, (startPos + 1 * vSpacer), 50,50);*/
-				/*			context.drawImage(t_box, -1, (startPos + 5 * vSpacer), 46,46);
-							context.drawImage(g_box, 2, (startPos + 8.5 * vSpacer), 40,40);
-							context.drawImage(lines[3], 0, (startPos + 1 * vSpacer));
-							context.drawImage(lines[3], 0, (startPos + 2 * vSpacer));
-							context.drawImage(lines[2], 0, (startPos + 3 * vSpacer));*/
+							this.DrawImage("lh3", 0, (this.startPos + 1 * this.vSpacer));
+							this.DrawImage("lh3", 0, (this.startPos + 2 * this.vSpacer));
+							this.DrawImage("lh3", 0, (this.startPos + 3 * this.vSpacer));
 
 							drawNames();
 							InitCells();
+
+							/*ctx.drawImage(lines[0],13 + (w/3 - 10),90,lines[0].width,lines[0].height - 90);
+							ctx.drawImage(lines[0],13 + 2 * (w/3 - 10),90,lines[0].width,lines[0].height - 90);
+							ctx.drawImage(lines[2], 0, (startPos + 0 * vSpacer));
+							ctx.drawImage(h_box, -5, (startPos + 1 * vSpacer), 50,50);
+				/*			ctx.drawImage(t_box, -1, (startPos + 5 * vSpacer), 46,46);
+							ctx.drawImage(g_box, 2, (startPos + 8.5 * vSpacer), 40,40);  * /
+							ctx.drawImage(lines[3], 0, (startPos + 1 * vSpacer));
+							ctx.drawImage(lines[3], 0, (startPos + 2 * vSpacer));
+							ctx.drawImage(lines[2], 0, (startPos + 3 * vSpacer));*/
+						}
+
+						this.DrawImage = function(imageName, x, y){
+							ctx.drawImage(this.GetImage(imageName), x, y)
+						}
+
+						this.GetImage = function(imageName){
+							var index = this.imageNames.indexOf(imageName);
+							return this.images[index];
 						}
 
 						this.AddScore = function(playerid, score, row){
 							scoreBoard.cells[playerid][row].SetText(score);
 							scoreBoard.cells[playerid][row].UpdateCell(ctx);
 						}
+						this.SetFontSize = function(fontsize){
+							ctx.font = fontsize + "px Comic Sans MS";
+						}
 					}
 
-					function Cell(width, height, xPos, yPos){
+					function Cell(id, width, height, xPos, yPos){
 						this.cellCanvas = document.createElement('canvas');
-						this.cellCanvas.id = "sB" + i + "0";
+						this.cellCanvas.id = "sB" + id + "0";
 						this.cellCanvas.width = width;
 						this.cellCanvas.height = height;
 						this.ctx = this.cellCanvas.getContext("2d");
-						this.ctx.font = "25px Comic Sans MS";
+						this.ctx.font = "21px Comic Sans MS";
 						this.ctx.fillStyle = "rgba(41, 55, 166, 1)";
 						this.x = xPos;
 						this.y = yPos;
@@ -212,6 +190,9 @@
 							this.value = text;
 							this.ctx.fillText(text, 0 + (this.cellCanvas.width - this.ctx.measureText(text).width) / 2, 20);
 						}
+						this.SetFontSize = function(fontsize){
+							this.ctx.font = fontsize + "px Comic Sans MS";
+						}
 					}
 
 				function CountImages(){
@@ -223,35 +204,13 @@
 			
 					
 
-					/*ctx.moveTo(0,0);
-					ctx.lineTo(200,100);
-					ctx.stroke();*/
 				</script>
 				
-				<!-- <script language="JavaScript">
-					if(document.layers) {
-					window.captureEvents(Event.ONCLICK); window.onclick = MouseClick; }
-					else {
-						document.onclick = MouseClick;
-					}
-				</script> -->
 
 			</div>
 	</center>
 
-<!--
-		
-		<script language="JavaScript">
-		
-		if(document.layers) {
-		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
-		   else {
-			  document.onmousemove = MouseMove;
-		   }
-		</script>
-		
--->
-		
+
 		
 		
 		
