@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Simple Canvas Dartbaord</title>
+		<script src='./victor.min.js'></script>
+		<script src='./dartboard.js'></script>
+		<script src='./highlight.js'></script>
+		<script src='./gameLogic.js'></script>
+	</head>
+	<body onload='DartBoard().init();'>
+		<canvas onClick="displayScore();" id="canvas" width="800" height="800"></canvas>
+		<h1 id="title" style="color:rgb(0, 0, 0)" lang="de">Darts</h1>
+		
+		
+		
+		<script language="JavaScript">
+		
+		if(document.layers) {
+		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = koordinaten; }
+		   else {
+			  document.onmousemove = koordinaten;}
+		   
+		</script>
+		
+		
+		<form action=""> 
+		<input type="text" name="koord" value="Xpos =0; Ypos =0" size="100" readonly> 
+		</form> 
+	</body>
+</html>

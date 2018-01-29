@@ -1,0 +1,204 @@
+players = [];
+
+
+function initScoreboard() {
+    ////console.log("Init. Scoreboard!");
+
+    //players = [];
+
+    addPlayer("Clarsi");
+    addPlayer("Jannowitz");
+    addPlayer("Junjuaner");
+
+
+    rounds = [];
+
+    // players[id][i] i=0: name; i=1: throw:1; i=2: throw:2;...
+
+    activePlayer = 0;
+    throwCount = 1;
+
+    leg = 1;
+
+    //console.log("First round start!, Waiting for #" + throwCount + " from " + players[activePlayer][0]);
+
+    for (i = 0; i < players.length; i++) {
+        document.getElementById("player" + i).textContent = players[i][0];
+        console.log(document.getElementById("player" + i));
+    }
+    /*
+    title = players[0][0];
+    for(var i=1; i < players.length; i++){
+        title = title + " | " + players[i][0];
+    }
+    title = title + String.fromCharCode(13, 10);
+    
+    document.forms[0].elements[0].value = title;
+    window.status = title;
+    */
+}
+
+function getScoreboard() {
+    output = "";
+    //title = players[0][0] + " | " + players[1][0] + " | " + players[2][0] + " | " + players[3][0] + String.fromCharCode(13, 10);
+    scores = "";
+    //console.log(players.length);
+    for (var i = 0; i < players.length; i++) {
+        for (var j = 1; j <= 3; j++) {
+            score = players[i][j];
+            if (score >= 0) {
+                scores = scores + score;
+                if (j < 3) {
+                    scores = scores + " | ";
+                }
+            }
+        }
+        scores = scores + String.fromCharCode(9);
+    }
+
+    return scores;
+}
+
+function displayScoreboard() {
+    /*document.forms[0].elements[0].value = text;
+    window.status = text; */
+}
+
+function addThrow(score) {
+    //console.log(players[activePlayer][0] + " #" + throwCount + ": " + score);
+
+    players[activePlayer][throwCount] = score;
+
+    //console.log(players[activePlayer][throwCount] + "saved! ");
+
+    throwCount++;
+
+    if (throwCount > 3) {
+
+
+        if (activePlayer < players.length - 1) {
+            activePlayer += 1;
+
+        } else {
+            activePlayer = 0;
+        }
+        throwCount = 1;
+    }
+}
+
+function getLeg() {
+    output = "";
+
+    //console.log("tC" + throwCount);
+
+    tC = throwCount;
+
+    playerid = activePlayer;
+
+    if (tC == 1) {
+        playerid = lastPlayerID();
+        tC = 4;
+        displayLeg();
+    }
+
+    output = players[playerid][0] + ": ";
+    output = output + players[playerid][1];
+    for ($i = 2; $i < tC; $i++) {
+        output = output + " | " + players[playerid][$i];
+    }
+
+    return output;
+}
+
+function displayLeg() {
+    legScore = 0;
+    for (i = 1; i < 4; i++) {
+        legScore += players[playerid][i];
+    }
+
+    if(leg < 4){
+        document.getElementById("hoch" + leg + playerid).textContent = legScore;
+    }else if(leg => 4 && leg < 7){
+        //console.log("tief" + (leg - 3) + playerid);
+        document.getElementById("tief" + (leg - 3) + playerid).textContent = legScore;
+    }
+    
+
+    if (playerid >= players.length - 1) {
+        leg++;
+    }
+
+    if (leg == 4) {
+        sumHoch();
+    }
+    if(leg == 7){
+        sumTief();
+        sumFinal();
+        displayPokal();
+    }
+
+    //displayPokal(); //DEBUG
+}
+
+function sumHoch() {
+    for (i = 0; i < players.length; i++) {
+        hScore = 0;
+        for (j = 1; j < 4; j++) {
+            hScore += parseInt(document.getElementById("hoch" + j + i).textContent);
+            ////console.log(hScore);
+        }
+        document.getElementById("hochS" + i).textContent = hScore;
+    }
+}
+
+function sumTief() {
+    for (i = 0; i < players.length; i++) {
+        hScore = 0;
+        for (j = 1; j < 4; j++) {
+            hScore += parseInt(document.getElementById("tief" + j + i).textContent);
+            ////console.log(hScore);
+        }
+        document.getElementById("tiefS" + i).textContent = hScore;
+    }
+}
+function sumFinal() {
+    for (i = 0; i < players.length; i++) {
+        diff = parseInt(document.getElementById("hochS" + i).textContent) - parseInt(document.getElementById("tiefS" + i).textContent);
+        document.getElementById("finalS" + i).textContent = diff;
+    }
+}
+
+function displayPokal(){
+    //sortedPlys = players.sort(compare);
+    //SORTING ALG HERE
+    
+    for(i = 0; i < sortedPlys.length; i++){
+        //plyerScore = parseInt(document.getElementById("finalS" + i).textContent);
+        ////console.log(sortedPlys[i][0]);
+    }
+    
+
+    for (i = 0; i < sortedPlys.length; i++) {
+        img = document.createElement('img');    
+        img.src = 'dartboard/img/pokal' + (i+1) + '.png';
+        document.getElementById("pokalS" + i).appendChild(img);
+    }
+}
+
+function lastPlayerID() {
+    if (activePlayer == 0) {
+        lastplayer = (players.length - 1);
+    } else {
+        lastplayer = activePlayer - 1;
+    }
+
+    return lastplayer;
+}
+
+function getPlayers(){
+    return player;
+}
+
+function addPlayer(playerName){
+    players.push([playerName]);
+}

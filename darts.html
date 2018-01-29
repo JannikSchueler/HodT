@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+	<html>
+
+	<head>
+		<link rel="stylesheet" href="/res/footer.css" type="text/css" />
+		<script src='./dartboard/menu'></script>
+	</head>
+
+	<body onload=''>
+		<br>
+	
+		<script language="JavaScript">
+			//initGameLogic();
+			//initScoreboard();//OLD
+		</script>
+
+		<center>
+			<div class="main_menu">
+				<canvas id="menu_canvas" width="1000" height="750"> </canvas>
+
+				<script>
+					var c = document.getElementById("menu_canvas");
+					//c.width = window.innerWidth - 50;
+					//c.height = window.innerWidth - 50;
+					var ctx = c.getContext("2d");
+
+					var grd = ctx.createLinearGradient(0,0,200,0);
+					grd.addColorStop(0,"black");
+					grd.addColorStop(1,"rgba(255, 255, 255, 0)");
+
+					//shadow on
+					ctx.shadowBlur=8;
+					ctx.shadowOffsetX=20;
+					ctx.shadowOffsetY=5;
+					ctx.shadowColor="rgba(0, 0, 0, 0.5)";
+					
+					//background
+					ctx.rect(0,0,c.width,c.height);
+					ctx.stroke();
+					ctx.fillStyle = "rgba(255, 255, 255, 0.40)";
+					ctx.fillRect(0,0,c.width,c.height);
+
+					//shadow off
+					ctx.shadowOffsetX=0;
+					ctx.shadowOffsetY=0;
+
+					//title
+					ctx.fillStyle = "rgba(0, 0, 0, 1)";
+					ctx.font = "50px Arial";
+					ctx.textAlign="center"; 
+					ctx.fillText("Darts! - Hauptmenu", c.width/2, 100);
+
+					//PlayerSection
+					var spacer = 40;
+					var rowSpacer = 50;
+					var width = (c.width - (40*4))/2;
+					ctx.font = "30px Arial";
+
+						//border
+					refY = 165
+					ctx.rect(spacer,refY,width,500);
+					ctx.stroke();
+
+						//Title
+					ctx.fillText("Spieler", c.width/4, refY + 35);
+					ctx.moveTo(spacer,refY + rowSpacer);
+					ctx.lineTo(c.width/2-spacer,refY + rowSpacer);
+					ctx.textAlign="left";
+					ctx.font = "20px Arial";
+					
+					ctx.fillText("Jannowitz", spacer * 2, refY + 1 * rowSpacer + 35);
+					ctx.moveTo(spacer,refY + 2 * rowSpacer);
+					ctx.lineTo(c.width/2-spacer,refY + 2 * rowSpacer);
+					ctx.fillText("Claasi", spacer * 2, refY + 2 * rowSpacer + 35);
+					ctx.moveTo(spacer,refY + 3 * rowSpacer);
+					ctx.lineTo(c.width/2-spacer,refY + 3 * rowSpacer);
+					ctx.fillText("Bonjuaner", spacer * 2, refY + 3 * rowSpacer + 35);
+					ctx.moveTo(spacer,refY + 4 * rowSpacer);
+					ctx.lineTo(c.width/2-spacer,refY + 4 * rowSpacer);
+					ctx.textAlign="center"; 
+					ctx.fillText("+", c.width/4, refY + 4 * rowSpacer + 35);
+					ctx.moveTo(spacer,refY + 5 * rowSpacer);
+					ctx.lineTo(c.width/2-spacer,refY + 5 * rowSpacer);
+
+
+
+					//GameModeSection
+					ctx.rect(c.width/2 + spacer,165,width,350);
+					ctx.stroke();
+
+					//Settings Button
+					ctx.rect(c.width/2 + spacer, 515 + 110, spacer + 10,spacer);
+					ctx.stroke();
+
+					//Play Button
+					ctx.rect(c.width/2 + spacer + 76,515 + 110,width-76,spacer);
+					ctx.stroke();
+
+					ctx.textAlign="center";
+					ctx.font = "30px Arial";
+					ctx.fillText("Play", c.width*3/4 + 38, 655);
+
+					var input = new CanvasInput({
+						canvas: c
+					});
+
+					/*ctx.moveTo(0,0);
+					ctx.lineTo(200,100);
+					ctx.stroke();*/
+				</script>
+				
+				<!-- <script language="JavaScript">
+					if(document.layers) {
+					window.captureEvents(Event.ONCLICK); window.onclick = MouseClick; }
+					else {
+						document.onclick = MouseClick;
+					}
+				</script> -->
+
+			</div>
+	</center>
+
+<!--
+		
+		<script language="JavaScript">
+		
+		if(document.layers) {
+		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
+		   else {
+			  document.onmousemove = MouseMove;
+		   }
+		</script>
+		
+-->
+		
+		
+		
+		
+		
+		
+		
+		<div id="footer">
+			<ul id="footer_menu">
+
+				<li class="homeButton">
+					<a href="/"></a>
+				</li>
+
+				<li>
+					<a href="imagedisplay.php">ImageDisplay</a>
+					<ul class="dropup">
+						<li>
+							<a href= "/imagedisplay.php"> NFL Logos</a>
+							<!--
+							<iframe src="http://192.168.0.24/imagedisplay.php?width=60?height=60" style="width: 550px; height: 350px; border: 0;" scrolling="no">Loading poll...</iframe>
+							-->
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/darts.html">Darts</a>
+					<ul class="dropup">
+						<li>
+								<center> <a href="/dartboard/x01#player=Claasi,Jannowitz,Jonjuaner;mode=0">X01</a> </center>
+						</li>
+
+						<li>
+								<center> <a href="/dartboard/hodt#player=Claasi,Jannowitz,Jonjuaner;mode=0">Hoch oder doch tief?</a> </center>
+						</li>
+					</ul>>
+				</li>
+			</ul>>		
+		</div>
+	</body>
+
+	</html>

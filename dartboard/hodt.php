@@ -1,0 +1,221 @@
+<?php
+$dropbox = "https://dl.dropboxusercontent.com/u/69716895/";
+?>
+
+
+<!DOCTYPE HTML>
+	<html>
+
+	<head>
+		<link rel="stylesheet" href="/res/footer.css" type="text/css" />
+		<script src='./victor.min.js'></script>
+		<script src='./dartboard.js'></script>
+		<script src='./scoreboard.js'></script>
+		<script src='./gameLogic.js'></script>
+		<!-- Footer Stylings -->
+		
+		<style>
+			table {
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				background: white;
+				border-collapse: collapse;
+			}
+			
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: center;
+				padding: 8px;
+			}
+			
+		</style>
+	</head>
+
+	<body onload='DartBoard().init();'>
+
+		<center>
+			<h1 style="color:rgb(255, 255, 255)" lang="de">Hoch oder doch Tief?</h1>
+		</center>
+
+	<div class="blob1">
+		<canvas id="canvas" width="800" height="800"> </canvas>
+		
+		<script language="JavaScript">
+			if(document.layers) {
+			window.captureEvents(Event.ONCLICK); window.onclick = MouseClick; }
+			else {
+				document.onclick = MouseClick;
+			}
+		</script>
+
+	</div>
+	
+	<div id="picture">
+		<div class="blob2">
+			<form>
+				<table style="width:525px">
+					<tr id="PlayerNames">
+						<th id="player0" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
+						<th id="player1" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
+						<th id="player2" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
+					</tr>
+					<tr>
+						<td id="hoch10" style="height:37px"></td>
+						<td id="hoch11" style="height:37px"></td>
+						<td id="hoch12" style="height:37px"></td>
+					</tr>
+					<tr>
+						<td id="hoch20" style="height:37px"></td>
+						<td id="hoch21" style="height:37px"></td>
+						<td id="hoch22" style="height:37px"></td>
+					</tr>
+					<tr>
+						<td id="hoch30" style="height:37px"></td>
+						<td id="hoch31" style="height:37px"></td>
+						<td id="hoch32" style="height:37px"></td>
+					</tr>
+					
+					<tr>
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="hochS0"></strong><br />
+						</td>
+
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="hochS1"></strong><br />
+						</td>
+						
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="hochS2"></strong><br />
+						</td>
+					</tr>
+
+				<tr>
+					<td id="tief10" style="height:37px"></td>
+					<td id="tief11" style="height:37px"></td>
+					<td id="tief12" style="height:37px"></td>
+				</tr>
+				<tr>
+					<td id="tief20" style="height:37px"></td>
+					<td id="tief21" style="height:37px"></td>
+					<td id="tief22" style="height:37px"></td>
+				</tr>
+				<tr>
+					<td id="tief30" style="height:37px"></td>
+					<td id="tief31" style="height:37px"></td>
+					<td id="tief32" style="height:37px"></td>
+				</tr>
+				
+				<tr>
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="tiefS0"></strong><br />
+						</td>
+
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="tiefS1"></strong><br />
+						</td>
+						
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="tiefS2"></strong><br />
+						</td>
+				</tr>
+
+				<tr>
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="finalS0"></strong><br />
+						</td>
+
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="finalS1"></strong><br />
+						</td>
+						
+						<td style="padding-left: 5px; padding-bottom: 3px;">
+							<strong style="font-size: 35px;" id="finalS2"></strong><br />
+						</td>
+				</tr>
+
+				<tr>
+					<td id="pokalS0"></td>
+					<td id="pokalS1"></td>
+					<td id="pokalS2"></td>
+				</tr>
+
+
+				</table>
+				
+				<script language="JavaScript">
+					initGameLogic();
+					//initScoreboard();//OLD
+				</script>
+			</form>
+			
+			<!-- 
+			<form action="" claas="debugText"> 
+				<input type="text" name="activePlayer" value="" size="40" readonly>
+			</form> -->
+			
+		</div>
+	</div> 
+	
+	
+	
+	
+	<div claas="debugText">
+		
+	</div>
+	
+		
+		
+		
+		<script language="JavaScript">
+		
+		if(document.layers) {
+		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
+		   else {
+			  document.onmousemove = MouseMove;
+		   }
+		</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<div id="footer">
+			<ul id="footer_menu">
+
+				<li class="homeButton">
+					<a href="/darts.html"></a>
+				</li>
+
+				<li>
+					<a href="imagedisplay.php">ImageDisplay</a>
+					<ul class="dropup">
+						<li>
+							<a href= "/imagedisplay.php"> NFL Logos</a>
+							<!--
+							<iframe src="http://192.168.0.24/imagedisplay.php?width=60?height=60" style="width: 550px; height: 350px; border: 0;" scrolling="no">Loading poll...</iframe>
+							-->
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/darts.html">Darts</a>
+					<ul class="dropup">
+						<li>
+								<center> <a href="/dartboard/x01#player=Claasi,Jannowitz,Jonjuaner;mode=0">X01</a> </center>
+						</li>
+
+						<li>
+								<center> <a href="/dartboard/hodt#player=Claasi,Jannowitz,Jonjuaner;mode=0">Hoch oder doch tief?</a> </center>
+						</li>
+					</ul>>
+				</li>
+			</ul>>		
+		</div>
+	</body>
+
+	</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+	<html>
+
+	<head>
+		<link rel="stylesheet" href="/res/footer.css" type="text/css" />
+	</head>
+
+	<body onload=''>
+		<br>
+	
+		<script language="JavaScript">
+			//initGameLogic();
+			//initScoreboard();//OLD
+		</script>
+
+		<center>
+			<div class="main_menu">
+				<canvas id="menu_canvas" width="800" height="800"> </canvas>
+
+				<script>
+					var c = document.getElementById("menu_canvas");
+					//c.width = window.innerWidth - 50;
+					//c.height = window.innerWidth - 50;
+					var ctx = c.getContext("2d");
+					var w = 462;
+					var h = 595;
+
+					
+
+
+					var players = ["Claasi", "Jannowitz", "Bonjuaner"];
+					var scoreBoard = new ScoreBoard();
+					
+
+					//shadow on
+					ctx.shadowBlur=8;
+					ctx.shadowOffsetX=155;
+					ctx.shadowOffsetY=1;
+					ctx.shadowColor="rgba(0, 0, 0, 0.5)";
+
+					ctx.fillStyle = "rgba(255, 255, 255, 1)";
+					//ctx.fillRect(0,h/2,w,h/2);
+					ctx.beginPath();
+					ctx.moveTo(2/3*w, 1/2*h);
+					ctx.lineTo(w - 50, 1/2*h);
+					ctx.lineTo(2/3*w, h);
+					ctx.lineTo(1/3*w, h);
+					ctx.fill();
+					//shadow off
+					ctx.shadowColor="rgba(0, 0, 0, 0)";
+					ctx.fillStyle = "rgba(200, 200, 200, 1)";
+					ctx.fillRect(0,0,w,h);
+
+
+
+					scoreBoard.InitScoreBoard();
+					
+
+					function drawLines(){
+						/*for(i = 0; i < images.length; i++){
+							ctx.drawImage(images[i], 0, 0);
+						}*/
+						startPos = 117;
+						vSpacer = 30;
+
+						ctx.drawImage(background, 0, 0);
+
+						ctx.drawImage(title, 20, 0);
+
+						ctx.drawImage(lines[0],13 + (w/3 - 10),90,lines[0].width,lines[0].height - 90);
+						ctx.drawImage(lines[0],13 + 2 * (w/3 - 10),90,lines[0].width,lines[0].height - 90);
+						ctx.drawImage(lines[2], 0, (startPos + 0 * vSpacer));
+						ctx.drawImage(h_box, -5, (startPos + 1 * vSpacer), 50,50);
+			/*			ctx.drawImage(t_box, -1, (startPos + 5 * vSpacer), 46,46);
+						ctx.drawImage(g_box, 2, (startPos + 8.5 * vSpacer), 40,40);*/
+						ctx.drawImage(lines[3], 0, (startPos + 1 * vSpacer));
+						ctx.drawImage(lines[3], 0, (startPos + 2 * vSpacer));
+						ctx.drawImage(lines[2], 0, (startPos + 3 * vSpacer));/*
+						ctx.drawImage(lines[2], 0, (startPos + 4 * vSpacer));
+						ctx.drawImage(lines[3], 0, (startPos + 5 * vSpacer));
+						ctx.drawImage(lines[3], 0, (startPos + 6 * vSpacer));
+						ctx.drawImage(lines[2], 0, (startPos + (7 * vSpacer) + 1));
+						ctx.drawImage(lines[1], 5, (startPos + 8 * vSpacer + 5));
+						ctx.drawImage(lines[1], 5, (startPos + 9 * vSpacer + 17));
+*/
+						//ctx.drawImage(lines[3], 0, startPos);
+						
+
+						
+						//draw a box over the top
+						//ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
+						//ctx.fillRect(0, 0, 500, 500);
+						drawNames();
+						InitCells();
+					};	
+
+					function drawNames(){
+						ctx.font = "25px Comic Sans MS";
+						ctx.fillStyle = "rgba(41, 55, 166, 1)";
+
+
+						ctx.lineWidth = 2;
+						ctx.strokeStyle = "rgba(15,0,20,1)";
+						ctx.strokeRect(0 + ctx.lineWidth / 2,0 + ctx.lineWidth / 2,w - ctx.lineWidth / 2,h - ctx.lineWidth / 2);
+					}
+
+					function InitCells(){
+						startPosY = 98;
+						startPosX = 20;
+						width = w/3 - 10;
+						height = vSpacer - 1;
+
+						for(var i = 0; i < players.length; i++){
+							var rows = [];
+							for(var j = 0; j < 10; j++){
+								var cell = new Cell(width, vSpacer, startPosX + i*(width), startPosY + j * (height + 1));
+								//cell.ctx.strokeRect(0,0,width,height);
+								
+								rows.push(cell);
+								ctx.drawImage(cell.cellCanvas, cell.x, cell.y);
+							}
+							scoreBoard.cells.push(rows);
+							scoreBoard.cells[i][0].SetText(players[i]);
+							scoreBoard.cells[i][0].UpdateCell(ctx);
+						}
+
+
+						//DEBUG
+						for(var i = 0; i < 3; i++){
+							for(var j = 1; j < 4; j++){
+								scoreBoard.AddScore(i, 180, j);
+							}
+						}
+						
+					}
+
+					function ScoreBoard(){
+						this.name = "";
+						this.id = 0;
+						this.cells = [];
+						this.images = [];
+						//this.imageNames = {0: 'background', 1: 'title', 2: 'h_box', 3: 't_box', 4: 'g_box', 5: 'lv1', 6: 'lh1', 7: 'lh2', 8: 'lh3'};
+						this.imageNames = ["background", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3"];
+						this.lines = {};
+						this.counter = Object.keys(this.imageNames).length;
+						
+
+						this.InitScoreBoard = function(){
+							for(i in this.imageNames){
+								img = new Image();
+								img.src = 'img/scoreboard/' + this.imageNames[i] + '.png';
+								img.id = this.imageNames[i];+
+								img.addEventListener("load", CountImages());
+
+								this.images.push(img);
+							}
+						}
+
+						
+
+						this.DrawScoreBoard = function(){
+							startPos = 117;
+							vSpacer = 30;
+
+							for(i = 0; i < this.images.length; i++){
+								console.log(this.images[i].src);
+								ctx.drawImage(this.images[i], 0, 0);
+							}
+
+							//console.log(this.images['background'].src);
+
+							
+
+							/*ctx.drawImage(this.images['lv1'],13 + (w/3 - 10),90,this.images['lv1'].width,this.images['lv1'].height - 90);
+							ctx.drawImage(this.images['lv1'],13 + 2 * (w/3 - 10),90,this.images['lv1'].width,this.images['lv1'].height - 90);
+							ctx.drawImage(this.images['lh2'], 0, (startPos + 0 * vSpacer));
+							ctx.drawImage(this.images['h_box'], -5, (startPos + 1 * vSpacer), 50,50);*/
+				/*			context.drawImage(t_box, -1, (startPos + 5 * vSpacer), 46,46);
+							context.drawImage(g_box, 2, (startPos + 8.5 * vSpacer), 40,40);
+							context.drawImage(lines[3], 0, (startPos + 1 * vSpacer));
+							context.drawImage(lines[3], 0, (startPos + 2 * vSpacer));
+							context.drawImage(lines[2], 0, (startPos + 3 * vSpacer));*/
+
+							drawNames();
+							InitCells();
+						}
+
+						this.AddScore = function(playerid, score, row){
+							scoreBoard.cells[playerid][row].SetText(score);
+							scoreBoard.cells[playerid][row].UpdateCell(ctx);
+						}
+					}
+
+					function Cell(width, height, xPos, yPos){
+						this.cellCanvas = document.createElement('canvas');
+						this.cellCanvas.id = "sB" + i + "0";
+						this.cellCanvas.width = width;
+						this.cellCanvas.height = height;
+						this.ctx = this.cellCanvas.getContext("2d");
+						this.ctx.font = "25px Comic Sans MS";
+						this.ctx.fillStyle = "rgba(41, 55, 166, 1)";
+						this.x = xPos;
+						this.y = yPos;
+						this.value = "";
+						this.isDrawn = false;
+
+						this.UpdateCell = function(context){
+							context.drawImage(this.cellCanvas, this.x, this.y);
+							this.isDrawn = true;
+						}
+						this.SetText = function(text){
+							this.value = text;
+							this.ctx.fillText(text, 0 + (this.cellCanvas.width - this.ctx.measureText(text).width) / 2, 20);
+						}
+					}
+
+				function CountImages(){
+					scoreBoard.counter--;
+					if (scoreBoard.counter === 0){
+						scoreBoard.DrawScoreBoard();
+					}
+				}
+			
+					
+
+					/*ctx.moveTo(0,0);
+					ctx.lineTo(200,100);
+					ctx.stroke();*/
+				</script>
+				
+				<!-- <script language="JavaScript">
+					if(document.layers) {
+					window.captureEvents(Event.ONCLICK); window.onclick = MouseClick; }
+					else {
+						document.onclick = MouseClick;
+					}
+				</script> -->
+
+			</div>
+	</center>
+
+<!--
+		
+		<script language="JavaScript">
+		
+		if(document.layers) {
+		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
+		   else {
+			  document.onmousemove = MouseMove;
+		   }
+		</script>
+		
+-->
+		
+		
+		
+		
+		
+		
+		
+		<div id="footer">
+			<ul id="footer_menu">
+
+				<li class="homeButton">
+					<a href="/"></a>
+				</li>
+
+				<li>
+					<a href="imagedisplay.php">ImageDisplay</a>
+					<ul class="dropup">
+						<li>
+							<a href= "/imagedisplay.php"> NFL Logos</a>
+							<!--
+							<iframe src="http://192.168.0.24/imagedisplay.php?width=60?height=60" style="width: 550px; height: 350px; border: 0;" scrolling="no">Loading poll...</iframe>
+							-->
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/darts.html">Darts</a>
+					<ul class="dropup">
+						<li>
+								<center> <a href="/dartboard/x01#player=Claasi,Jannowitz,Jonjuaner;mode=0">X01</a> </center>
+						</li>
+
+						<li>
+								<center> <a href="/dartboard/hodt#player=Claasi,Jannowitz,Jonjuaner;mode=0">Hoch oder doch tief?</a> </center>
+						</li>
+					</ul>>
+				</li>
+			</ul>>		
+		</div>
+	</body>
+
+	</html>
