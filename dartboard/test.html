@@ -19,13 +19,9 @@
 
 				<script>
 					var c = document.getElementById("menu_canvas");
-					//c.width = window.innerWidth - 50;
-					//c.height = window.innerWidth - 50;
 					var ctx = c.getContext("2d");
 					var w = 462;
 					var h = 595;
-
-					
 
 
 					var players = ["Claasi", "Jannowitz", "Bonjuaner"];
@@ -48,7 +44,7 @@
 					ctx.fill();
 					//shadow off
 					ctx.shadowColor="rgba(0, 0, 0, 0)";
-					ctx.fillStyle = "rgba(200, 200, 200, 1)";
+					ctx.fillStyle = "rgba(235, 235, 235, 1)";
 					ctx.fillRect(0,0,w,h);
 
 
@@ -63,8 +59,11 @@
 
 
 						ctx.lineWidth = 2;
-						ctx.strokeStyle = "rgba(15,0,20,1)";
+						ctx.strokeStyle = "rgba(255,255,255,1)";
 						ctx.strokeRect(0 + ctx.lineWidth / 2,0 + ctx.lineWidth / 2,w - ctx.lineWidth / 2,h - ctx.lineWidth / 2);
+						ctx.lineWidth = 1;
+						ctx.strokeStyle = "rgba(100,100,100,1)";
+						ctx.strokeRect(2, 2,w - 3,h - 3);
 					}
 
 
@@ -129,9 +128,10 @@
 							this.DrawImage("lv1", 13 + 2 * (w/3 - 10),90,this.GetImage("lv1").width,this.GetImage("lv1").height - 90);
 
 							this.DrawImage("lh2", 0, (this.startPos + 2 + 0 * this.vSpacer));
+							
 							this.DrawImage("h_box", -5, (this.startPos + 1 * this.vSpacer), 50,50);
-							this.DrawImage("t_box", -1, (this.startPos + 5 * this.vSpacer), 46,46);
-							this.DrawImage("g_box", 2, (this.startPos + 8.5 * this.vSpacer), 40,40);
+							//this.DrawImage("t_box", -1, (this.startPos + 5 * this.vSpacer), 46,46);
+							//this.DrawImage("g_box", 2, (this.startPos + 8.5 * this.vSpacer), 40,40);
 
 							this.DrawImage("lh3", 0, (this.startPos + 1 * this.vSpacer));
 							this.DrawImage("lh3", 0, (this.startPos + 2 * this.vSpacer));
