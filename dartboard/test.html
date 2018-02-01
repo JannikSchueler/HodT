@@ -103,7 +103,7 @@
 						this.cells = [];
 						this.images = [];
 						//this.imageNames = {0: 'background', 1: 'title', 2: 'h_box', 3: 't_box', 4: 'g_box', 5: 'lv1', 6: 'lh1', 7: 'lh2', 8: 'lh3'};
-						this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3", "lh4"];
+						this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3"];
 						this.lines = {};
 						this.counter = Object.keys(this.imageNames).length;
 						this.startPos = 115;
@@ -185,17 +185,6 @@
 							}else if(axis == 'x' || axis == 'h' || axis == 1){
 								ctx.drawImage(img, x - img.width / 2, y);
 							}
-						}
-
-						this.DrawScoreSeperator = function(leg){ //int: under wich round there should be a sep. 1st leg = 1
-							this.DrawImage( "lh4", 0, this.startPos + leg * (this.vSpacer + Math.trunc(leg/9) ));
-						}
-
-						this.DrawModeSeperator = function(mode){ //int: under wich mode there should be a sep. 1st mode = 1
-							this.DrawImage("lh2", 0, (this.startPos + mode * this.vSpacer));
-						}
-
-						this.DrawFinalScoreSeperator = function(){
 						}
 
 						this.FindBackgroundLines = function(){
