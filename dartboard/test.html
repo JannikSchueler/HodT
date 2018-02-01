@@ -62,7 +62,7 @@
 						ctx.strokeStyle = "rgba(255,255,255,1)";
 						ctx.strokeRect(0 + ctx.lineWidth / 2,0 + ctx.lineWidth / 2,w - ctx.lineWidth / 2,h - ctx.lineWidth / 2);
 						ctx.lineWidth = 1;
-						ctx.strokeStyle = "rgba(100,100,100,1)";
+						ctx.strokeStyle = "rgba(0,0,0,1)";
 						ctx.strokeRect(2, 2,w - 3,h - 3);
 					}
 
@@ -103,11 +103,12 @@
 						this.cells = [];
 						this.images = [];
 						//this.imageNames = {0: 'background', 1: 'title', 2: 'h_box', 3: 't_box', 4: 'g_box', 5: 'lv1', 6: 'lh1', 7: 'lh2', 8: 'lh3'};
-						this.imageNames = ["background", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3"];
+						this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3", "lh4"];
 						this.lines = {};
 						this.counter = Object.keys(this.imageNames).length;
 						this.startPos = 115;
 						this.vSpacer = 30;
+						this.linePos = [];
 
 
 						this.InitializeScoreBoard = function(){
@@ -122,20 +123,42 @@
 
 						this.DrawScoreBoard = function(){
 							this.DrawImage("background", 0, 0);
+							
 							this.DrawImage("title", 20, 0);
+
+							this.FindBackgroundLines(); // get the values for the horizontal lines to match up with the paperlines
 
 							this.DrawImage("lv1", 13 + (w/3 - 10),90,this.GetImage("lv1").width,this.GetImage("lv1").height - 90);
 							this.DrawImage("lv1", 13 + 2 * (w/3 - 10),90,this.GetImage("lv1").width,this.GetImage("lv1").height - 90);
 
-							this.DrawImage("lh2", 0, (this.startPos + 2 + 0 * this.vSpacer));
+							this.DrawImage("lh2", 0, this.getLinePos(7) - this.GetImage("lh2").height / 2);
 							
 							this.DrawImage("h_box", -5, (this.startPos + 1 * this.vSpacer), 50,50);
+
+							
 							//this.DrawImage("t_box", -1, (this.startPos + 5 * this.vSpacer), 46,46);
 							//this.DrawImage("g_box", 2, (this.startPos + 8.5 * this.vSpacer), 40,40);
 
-							this.DrawImage("lh3", 0, (this.startPos + 1 * this.vSpacer));
-							this.DrawImage("lh3", 0, (this.startPos + 2 * this.vSpacer));
-							this.DrawImage("lh3", 0, (this.startPos + 3 * this.vSpacer));
+							//this.DrawImage("lh3", 0, this.getLinePos(9) - this.GetImage("lh3").height / 2);
+							this.DrawImageCenter("lh3", 0, this.getLinePos(9), "y");
+							this.DrawImageCenter("lh3", 0, this.getLinePos(11), "y");
+							this.DrawImageCenter("lh2", 0, this.getLinePos(13), "y");
+							this.DrawImageCenter("lh2", 0, this.getLinePos(16), "y");
+							this.DrawImageCenter("lh3", 0, this.getLinePos(18), "y");
+							this.DrawImageCenter("lh3", 0, this.getLinePos(20), "y");
+							this.DrawImageCenter("lh2", 0, this.getLinePos(22), "y");
+							this.DrawImageCenter("lh1", 5, this.getLinePos(25), "y");
+							this.DrawImageCenter("lh1", 5, this.getLinePos(29), "y");
+							
+							//this.DrawScoreSeperator(1);
+							//this.DrawScoreSeperator(2);
+
+							/*this.DrawModeSeperator(3);
+							this.DrawModeSeperator(4);
+
+							this.DrawScoreSeperator(5);
+							this.DrawScoreSeperator(6);*/
+							//this.DrawScoreSeperator(3);
 
 							drawNames();
 							InitCells();
@@ -155,6 +178,54 @@
 							ctx.drawImage(this.GetImage(imageName), x, y)
 						}
 
+						this.DrawImageCenter = function(imageName, x, y, axis){
+							var img = this.GetImage(imageName); 
+							if(axis == 'y' || axis == 'v' || axis == 0){
+								ctx.drawImage(img, x, y - img.height / 2);
+							}else if(axis == 'x' || axis == 'h' || axis == 1){
+								ctx.drawImage(img, x - img.width / 2, y);
+							}
+						}
+
+						this.DrawScoreSeperator = function(leg){ //int: under wich round there should be a sep. 1st leg = 1
+							this.DrawImage( "lh4", 0, this.startPos + leg * (this.vSpacer + Math.trunc(leg/9) ));
+						}
+
+						this.DrawModeSeperator = function(mode){ //int: under wich mode there should be a sep. 1st mode = 1
+							this.DrawImage("lh2", 0, (this.startPos + mode * this.vSpacer));
+						}
+
+						this.DrawFinalScoreSeperator = function(){
+						}
+
+						this.FindBackgroundLines = function(){
+							var icanvas = document.createElement('canvas');
+							icanvas.id = "icanvas";
+							icanvas.widht = 10;
+							icanvas.height = 600;
+							var ictx = icanvas.getContext('2d');
+							var bground = this.GetImage("bground")
+							ictx.drawImage(bground,0, 0);
+
+							var imgSpacer = 15;
+							var imgData = ictx.getImageData(0, imgSpacer, 1, bground.height - imgSpacer*2);
+							var rgb = 0;
+							var threshold = 200; //pixel gets ignored if rgb sum is below threshold*3
+
+							for(var i = 0; i < imgData.data.length; i++){
+								if((i%4) != 3){
+									rgb += imgData.data[i];
+								}else{
+									if(rgb <= threshold*3){
+										pos = (i-3)/4 + imgSpacer;
+										this.linePos.push(pos);
+										//console.log("added " + pos + " as linePos\tRGB: " + rgb);
+									}
+									rgb = 0;
+								}
+                        	}
+						}
+
 						this.GetImage = function(imageName){
 							var index = this.imageNames.indexOf(imageName);
 							return this.images[index];
@@ -166,6 +237,9 @@
 						}
 						this.SetFontSize = function(fontsize){
 							ctx.font = fontsize + "px Comic Sans MS";
+						}
+						this.getLinePos = function(line){
+							return this.linePos[line];
 						}
 					}
 
