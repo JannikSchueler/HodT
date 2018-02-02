@@ -126,6 +126,7 @@
 						this.images = [];
 						//this.imageNames = {0: 'background', 1: 'title', 2: 'h_box', 3: 't_box', 4: 'g_box', 5: 'lv1', 6: 'lh1', 7: 'lh2', 8: 'lh3'};
 						this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3"];
+						this.prices = [];
 						this.lines = {};
 						this.counter = Object.keys(this.imageNames).length;
 						this.startPos = 115;
@@ -141,6 +142,14 @@
 								img.src = "img/scoreboard/" + this.imageNames[i] + ".png";
 								
 								this.images.push(img);
+							}
+							for(var i = 0; i < 3; i++){
+								var img = new Image;
+								img.onload = CountImages;
+								img.src = "img/scoreboard/pokal" + (i+1) + ".png";
+								img.height = 100;
+								img.width = 50;
+								this.prices.push(img);
 							}
 						}
 
@@ -176,6 +185,7 @@
 
 							drawNames();
 							InitCells();
+							this.DrawPrize(0,0);
 						}
 
 						this.DrawImage = function(imageName, x, y){
@@ -189,13 +199,6 @@
 							}else if(axis == 'x' || axis == 'h' || axis == 1){
 								ctx.drawImage(img, x - (img.width / 2) + 1, y);
 							}
-						}
-
-						this.DrawTableLine = function(legsPlayed){
-							var lineType = "";
-							var linePos = 0;
-
-
 						}
 
 						this.FindBackgroundLines = function(){
@@ -248,6 +251,11 @@
 						this.getLinePos = function(line){
 							return this.linePos[line];
 						}
+						this.DrawPrize = function(playerID, price){
+							console.log(this.prices[0]);
+							ctx.drawImage(this.prices[0], 200, 200);
+						}
+
 					}
 
 					function Cell(id, width, height, xPos, yPos, fontsize, color){
