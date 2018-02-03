@@ -77,6 +77,7 @@
 							var height = 30;
 							var fontsize = 21;
 							var color = settings_TextColor[2];
+							var yoffset = 5;
 
 							for(var j = 0; j < 10; j++){
 								if(j > 0){
@@ -96,7 +97,7 @@
 									}
 								}
 
-								var cell = new Cell(i + "_" + j, width, height, startPosX + i*(width), scoreBoard.tableLinePos[j] - height*0.9, fontsize, color);
+								var cell = new Cell(i + "_" + j, width, height, startPosX + i*(width), scoreBoard.tableLinePos[j] - height + yoffset, fontsize, color);
 								//cell.ctx.strokeRect(0,0,width,height);
 								
 								rows.push(cell);
