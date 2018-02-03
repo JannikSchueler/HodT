@@ -48,8 +48,6 @@
 					ctx.fillRect(0,0,w,h);
 
 
-
-					//scoreBoard.InitScoreBoard();
 					scoreBoard.InitializeScoreBoard();
 					
 
@@ -109,14 +107,6 @@
 							scoreBoard.cells[i][0].SetText(players[i]);
 							scoreBoard.cells[i][0].UpdateCell(ctx);
 						}
-
-						//DEBUG
-						for(var i = 0; i < 3; i++){
-							for(var j = 1; j < 10; j++){
-								scoreBoard.AddScore(i, 180, j);
-							}
-						}
-						
 					}
 
 					function ScoreBoard(){
@@ -137,18 +127,18 @@
 
 						this.InitializeScoreBoard = function(){
 							for(var i in this.imageNames){
-								var img = new Image;
+								var img = new Image();
 								img.onload = CountImages;
 								img.src = "img/scoreboard/" + this.imageNames[i] + ".png";
 								
 								this.images.push(img);
 							}
 							for(var i = 0; i < 3; i++){
-								var img = new Image;
+								var img = new Image();
 								img.onload = CountImages;
 								img.src = "img/scoreboard/pokal" + (i+1) + ".png";
-								img.height = 100;
-								img.width = 50;
+								img.style.height = "50px";
+								img.style.width = "50px";
 								this.prices.push(img);
 							}
 						}
@@ -185,7 +175,38 @@
 
 							drawNames();
 							InitCells();
-							this.DrawPrize(0,0);
+
+
+							//DEBUG
+							for(var i = 0; i < 3; i++){
+								for(var j = 1; j < 10; j++){
+									multiplier = Math.floor((Math.random() * 3) + 1);
+									score = Math.floor((Math.random() * 20) + 0);
+									if(Math.floor((Math.random() * 100) + 0) > 95){
+										score = 25;
+										multiplier = Math.floor((Math.random() * 2) + 1);
+									}
+									if(j != 4 && j != 8 && j != 9){
+										scoreBoard.AddScore(i, score * multiplier, j);
+									}else if(j == 4){
+										scoreBoard.AddScore(i, scoreBoard.GetHochScore(i), j);
+									}else if(j == 8){
+										scoreBoard.AddScore(i, scoreBoard.GetTiefScore(i), j);
+									}else if(j == 9){
+										scoreBoard.AddScore(i, scoreBoard.GetFinalScore(i), j);
+									}
+									
+								}
+							}
+
+							trophys = [1,2,3];
+							for(var i = 0; i < players.length; i++){
+								index = Math.floor((Math.random() * trophys.length) + 0);
+								trophy = trophys[index];
+								trophys.remove(trophys.indexOf(trophy));
+								
+								this.DrawPrize(i, trophy);
+							}
 						}
 
 						this.DrawImage = function(imageName, x, y){
@@ -251,11 +272,29 @@
 						this.getLinePos = function(line){
 							return this.linePos[line];
 						}
-						this.DrawPrize = function(playerID, price){
-							console.log(this.prices[0]);
-							ctx.drawImage(this.prices[0], 200, 200);
+						this.DrawPrize = function(playerID, place){
+							trophy = this.prices[place-1];
+							xoffset = 15;
+							yoffset = 5;
+							ctx.drawImage(trophy, this.cells[playerID][0].x + xoffset, this.getLinePos(29) +  yoffset);
 						}
-
+						this.GetHochScore = function(playerID){
+							hscore = 0;
+							for(var row = 1; row < 4; row++){
+								hscore += this.cells[playerID][row].value;
+							}
+							return hscore;
+						}
+						this.GetTiefScore = function(playerID){
+							tscore = 0;
+							for(var row = 5; row < 8; row++){
+								tscore += this.cells[playerID][row].value;
+							}
+							return tscore;
+						}
+						this.GetFinalScore = function(playerID){
+							return this.cells[playerID][4].value - this.cells[playerID][8].value;;
+						}
 					}
 
 					function Cell(id, width, height, xPos, yPos, fontsize, color){
@@ -294,6 +333,13 @@
 						scoreBoard.DrawScoreBoard();
 					}
 				}
+
+				// Array Remove - By John Resig (MIT Licensed)
+				Array.prototype.remove = function(from, to) {
+				var rest = this.slice((to || from) + 1 || this.length);
+				this.length = from < 0 ? this.length + from : from;
+				return this.push.apply(this, rest);
+				};
 			
 					
 
