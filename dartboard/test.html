@@ -27,6 +27,7 @@
 					var players = ["Claasi", "Jannowitz", "Bonjuaner"];
 					var scoreBoard = new ScoreBoard();
 
+					
 					//shadow on
 					ctx.shadowBlur=8;
 					ctx.shadowOffsetX=155;
@@ -157,11 +158,8 @@
 							
 							this.DrawImage("h_box", -5, (this.startPos + 1 * this.vSpacer), 50,50);
 
-							
-							//this.DrawImage("t_box", -1, (this.startPos + 5 * this.vSpacer), 46,46);
-							//this.DrawImage("g_box", 2, (this.startPos + 8.5 * this.vSpacer), 40,40);
 
-							//this.DrawImage("lh3", 0, this.getLinePos(9) - this.GetImage("lh3").height / 2);
+							
 							
 							this.DrawImageCenter("lh3", 0, this.getLinePos(9), "y");
 							this.DrawImageCenter("lh3", 0, this.getLinePos(11), "y");
@@ -266,6 +264,7 @@
 							scoreBoard.cells[playerid][row].SetText(score);
 							scoreBoard.cells[playerid][row].UpdateCell(ctx);
 						}
+						
 						this.SetFontSize = function(fontsize){
 							ctx.font = fontsize + "px Comic Sans MS";
 						}
