@@ -53,7 +53,7 @@ body{
 }
 #footer .img_left{
 	float:left;
-	margin:right: 10px;
+	margin-right: 10px;
 	width: 40px;
 }
 #footer .black_box{
@@ -82,8 +82,8 @@ body{
 }
 
 /*	M	A 	D	E	^	W	I	T	H	^	V	I	D	E	O	^	T	U	T	O	R	I	A	L	S	/*	
-
-a.notificationIcons span { /* span is text when you hover over */
+/* span is text when you hover over */
+a.notificationIcons span { 
         display:none;
         font-size:12px;
         padding:5px;
@@ -263,8 +263,21 @@ a.notificationIcons:hover span {
     border: 2px solid #ccc;*/
 }
 
+.blob1{
+        position: absolute;
+        top: 10px;
+	left: 10px;
+}
+
 .blob2{
-	position: relative;
+        position: relative;
+        top: 45px;
+	left: 740px;
+}
+
+.blob3{
+        position: relative;
+        top: 500px;
 	left: 800px;
 }
 
