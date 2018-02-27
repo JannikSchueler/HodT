@@ -17,16 +17,25 @@
 
 function ScoreBoard(nameArray, playsPL, legsPM){
     this.players = [];
+    this.activePlayerID;
+    this.activePlayerColor = "rgba(0,155,0, 0.3)";
     this.playsPerLeg = playsPL;
     this.legsPerMode = legsPM;
     this.canvas = document.getElementById("scoreboard_canvas");
     this.ctx = this.canvas.getContext('2d');
+    this.overlay = document.getElementById("overlay_canvas");
+    this.overlayCtx = this.overlay.getContext('2d');
     this.width = 462;
     this.height = 595;
     
     this.cells = [];
     this.images = [];
-    this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3", "pokal1","pokal2","pokal3"];
+    this.numbers = [];
+    this.imageNames = ["background", "bground", "title", "h_box", "t_box", "g_box", "lv1", "lh1", "lh2", "lh3", "pokal1","pokal2","pokal3", "minus"];
+    this.test = "this is a test..";
+    for(var i = 0; i < 10; i++){
+        this.imageNames.push(i);
+    }
     this.imageCounter = Object.keys(this.imageNames).length;
     this.linePos = [];
     this.tableLinePos = [];
@@ -43,6 +52,7 @@ function ScoreBoard(nameArray, playsPL, legsPM){
     
     
     this.InitializeScoreBoard = function(){
+        //load images to draw ScoreBoard
         for(var i = 0; i < this.imageNames.length; i++){
             var img = new Image();
             img.onload = CountImages;
@@ -50,7 +60,7 @@ function ScoreBoard(nameArray, playsPL, legsPM){
             
             this.images.push(img);
         }
-        
+
         console.log(this.images);
         
         //shadow on
@@ -104,7 +114,7 @@ function ScoreBoard(nameArray, playsPL, legsPM){
                     }
                 }
                 
-                var cell = new Cell(i + "_" + j, width, height, startPosX + i*(width), this.tableLinePos[j] - height + yoffset, fontsize, color);
+                var cell = new Cell(this, i + "_" + j, width, height, startPosX + i*(width), this.tableLinePos[j] - height + yoffset, fontsize, color);
                 //cell.ctx.strokeRect(0,0,width,height);
                 
                 rows.push(cell);
@@ -113,7 +123,7 @@ function ScoreBoard(nameArray, playsPL, legsPM){
             
             this.cells.push(rows);
             this.cells[i][0].SetText(this.players[i].name);
-            this.cells[i][0].UpdateCell(this.ctx);
+            console.log("init!");
         }
     }
     
@@ -124,6 +134,7 @@ function ScoreBoard(nameArray, playsPL, legsPM){
         this.DrawImage("title", 20, 0);
         
         this.FindBackgroundLines(); // get the values for the horizontal lines to match up with the paperlines
+
         
         this.ctx.lineWidth = 2;
 		this.ctx.strokeStyle = "rgba(255,255,255,1)";
@@ -137,13 +148,24 @@ function ScoreBoard(nameArray, playsPL, legsPM){
         
         this.DrawImage("lh2", 0, this.getLinePos(7) - this.GetImage("lh2").height / 2);
         
-        this.DrawImage("h_box", -5, this.getLinePos(8));
+        this.DrawModeIdenticator("hoch");
         
         /*this.DrawImageCenter("lh3", 0, this.getLinePos(9), "y");
 		this.DrawImageCenter("lh3", 0, this.getLinePos(11), "y");
         this.DrawImageCenter("lh2", 0, this.getLinePos(13), "y");*/
         
         this.InitializeCells();
+
+        console.log(this.cells);
+
+        this.DrawActivePlayer();
+
+        //this.cells[0][1].SetImage(this.GetImage(0));
+        //for(var i = 1; i < 10; i++){
+        //    this.cells[0][i].SetScore(120);
+        //}
+        
+
         /*
         //DEBUG
 		for(var i = 0; i < 3; i++){
@@ -178,10 +200,15 @@ function ScoreBoard(nameArray, playsPL, legsPM){
     }
     
     this.DrawImage = function(imageName, x, y){
+        x = Math.floor(x);
+        y = Math.floor(y);
         this.ctx.drawImage(this.GetImage(imageName), x, y)
     }
     
     this.DrawImageCenter = function(imageName, x, y, axis){
+        x = Math.floor(x) + 1;
+        y = Math.floor(y) + 1;
+
         var img = this.GetImage(imageName); 
         if(axis == 'y' || axis == 'v' || axis == 0){
             this.ctx.drawImage(img, x, y - (img.height / 2) + 1);
@@ -231,8 +258,9 @@ function ScoreBoard(nameArray, playsPL, legsPM){
     }
     
     this.AddScore = function(playerid, score, row){
-        this.cells[playerid][row].SetText(score);
-        this.cells[playerid][row].UpdateCell(this.ctx);
+        console.log("AddScore( " + playerid + ", " + score + ", " + row);
+        this.cells[playerid][row].SetScore(score);
+        //this.cells[playerid][row].SetText(score);
     }
     
     this.SetFontSize = function(fontsize){
@@ -241,6 +269,14 @@ function ScoreBoard(nameArray, playsPL, legsPM){
     
     this.getLinePos = function(line){
         return this.linePos[line];
+    }
+
+    this.DrawModeIdenticator = function(mode){
+        if(mode == "hoch"){
+            this.DrawImage("h_box", -5, this.getLinePos(8));
+        }else if(mode == "tief"){
+            this.DrawImage("t_box", -5, this.getLinePos(17));
+        }
     }
     
     this.DrawTrophy = function(playerID, place){
@@ -319,6 +355,19 @@ function ScoreBoard(nameArray, playsPL, legsPM){
         }
         return this.players[i];
     }
+
+    this.DrawActivePlayer = function(){
+        console.log("drawing color for player: " + this.activePlayerID);
+        //console.log(this.activePlayerID);
+        playerCell = this.cells[this.activePlayerID][0];
+        this.overlayCtx.fillStyle = this.activePlayerColor;
+        this.overlayCtx.clearRect(0, playerCell.y - 5, this.overlay.width, playerCell.cellCanvas.height);
+        this.overlayCtx.fillRect(playerCell.x, playerCell.y - 5, playerCell.cellCanvas.width, playerCell.cellCanvas.height);
+    }
+
+    this.ClearOverlay = function(){
+        this.overlayCtx.clearRect(0, 0, this.overlay.width, this.overlay.height);
+    }
 }
 
 
@@ -393,27 +442,77 @@ function Player(name){
 
 
 /* CELL CLAAS */
-function Cell(id, width, height, xPos, yPos, fontsize, color){
+function Cell(scoreboard, id, width, height, xPos, yPos, fontsize, color){
+    this.scoreboard = scoreboard;
     this.cellCanvas = document.createElement('canvas');
 	this.cellCanvas.id = "sB" + id + "0";
 	this.cellCanvas.width = width;
     this.cellCanvas.height = height;
-    this.cellCanvas
 	this.ctx = this.cellCanvas.getContext("2d");
 	this.ctx.font = fontsize + "px Comic Sans MS";
 	this.ctx.fillStyle = color;
 	this.x = xPos;
 	this.y = yPos;
-	this.value = "";
+    this.text = "";
+    this.image;
     this.isDrawn = false;
     
     this.UpdateCell = function(context){
-        context.drawImage(this.cellCanvas, this.x, this.y);
+        this.scoreboard.ctx.drawImage(this.cellCanvas, this.x, this.y);
         this.isDrawn = true;
     }
     this.SetText = function(text){
-        this.value = text;
+        this.text = text;
         this.ctx.fillText(text, 0 + (this.cellCanvas.width - this.ctx.measureText(text).width) / 2, this.cellCanvas.height / 2 + 5);
+        this.UpdateCell();
+    }
+    this.SetImage = function(image){
+        this.image = image;
+        this.ctx.drawImage(image, this.cellCanvas.width/2 - image.width/2, 0);
+        this.UpdateCell();
+    }
+    this.SetScore = function(score){
+        var isNegative = false;
+        if(score < 0){
+            isNegative = true;
+            score = -score;
+        }
+
+        var s_string = score.toString();
+        var images = [];
+        var imgs_width = 0;
+        for(var i = 0; i < s_string.length; i++){
+            var img = this.scoreboard.GetImage(parseInt(s_string[i]));
+            images.push(img);
+            imgs_width += img.width;
+        }
+
+        var imgPosX = this.cellCanvas.width/2 - imgs_width/2;
+        var imgPosY = this.cellCanvas.height/2 - images[0].height/2;
+
+        var offsetY = -1;
+        console.log(imgPosY);
+
+        if(isNegative){
+            var minus = this.scoreboard.GetImage("minus");
+            this.ctx.drawImage(minus, imgPosX - minus.width, imgPosY + offsetY);
+        }
+
+        for(var i = 0; i < images.length; i++){
+            this.ctx.drawImage(images[i], imgPosX, imgPosY + offsetY);
+            imgPosX += images[i].width;
+        }
+
+
+        this.UpdateCell();
+        /*if(s_string.length == 3){
+            this.ctx.drawImage(images[0], this.cellCanvas.width/2 - (images[0].width + images[1].width/2), 0);
+            this.ctx.drawImage(images[1], this.cellCanvas.width/2 - images[1].width/2, 0);
+            this.ctx.drawImage(images[2], this.cellCanvas.width/2 + images[1].width/2, 0);
+        } else if(s_string.length == 2){
+            this.ctx.drawImage(images[0], this.cellCanvas.width/2 - (images[0].width + images[1].width/2), 0);
+            this.ctx.drawImage(images[1], this.cellCanvas.width/2 - images[1].width/2, 0);
+        }*/
     }
     this.SetFontSize = function(fontsize){
         this.ctx.font = fontsize + "px Comic Sans MS";
