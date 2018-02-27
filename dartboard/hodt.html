@@ -29,13 +29,9 @@
 
 	<body onload='DartBoard().init();'>
 
-		<center>
-		</center>
 
 	<div class="blob1">
 		<canvas id="canvas" width="800" height="800"> </canvas>
-
-		
 		
 		<script language="JavaScript">
 			if(document.layers) {
@@ -47,139 +43,26 @@
 
 	</div>
 
-	<div class="blob2">
-		<canvas id="scoreboard_canvas" width="570" height="600"> </canvas>
-	</div>
+	<div style="position: relative;">
+		<!--<div class="blob2">  <canvas id="scoreboard_canvas" width="570" height="600"> </canvas> 	CSS: position: relative; top: 45px; left: 740px;-->
+		<canvas id="scoreboard_canvas" width="570" height="600" style="position: absolute; top: 45px; left: 740px; z-index: 0;"></canvas>
+		<canvas id="overlay_canvas" width="570" height="600" style="position: absolute; top: 45px; left: 740px; z-index: 0;"></canvas>
 
-	
-	<div id="picture">
-		<div class="blob3">
-			<form>
-				<table style="width:525px">
-					<tr id="PlayerNames">
-						<th id="player0" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
-						<th id="player1" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
-						<th id="player2" style="width: 175px; padding-left: 25px; padding-right: 25px ;padding-top: 20px; padding-bottom: 20px;"></th>
-					</tr>
-					<tr>
-						<td id="hoch10" style="height:37px"></td>
-						<td id="hoch11" style="height:37px"></td>
-						<td id="hoch12" style="height:37px"></td>
-					</tr>
-					<tr>
-						<td id="hoch20" style="height:37px"></td>
-						<td id="hoch21" style="height:37px"></td>
-						<td id="hoch22" style="height:37px"></td>
-					</tr>
-					<tr>
-						<td id="hoch30" style="height:37px"></td>
-						<td id="hoch31" style="height:37px"></td>
-						<td id="hoch32" style="height:37px"></td>
-					</tr>
-					
-					<tr>
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="hochS0"></strong><br />
-						</td>
-
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="hochS1"></strong><br />
-						</td>
-						
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="hochS2"></strong><br />
-						</td>
-					</tr>
-
-				<tr>
-					<td id="tief10" style="height:37px"></td>
-					<td id="tief11" style="height:37px"></td>
-					<td id="tief12" style="height:37px"></td>
-				</tr>
-				<tr>
-					<td id="tief20" style="height:37px"></td>
-					<td id="tief21" style="height:37px"></td>
-					<td id="tief22" style="height:37px"></td>
-				</tr>
-				<tr>
-					<td id="tief30" style="height:37px"></td>
-					<td id="tief31" style="height:37px"></td>
-					<td id="tief32" style="height:37px"></td>
-				</tr>
-				
-				<tr>
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="tiefS0"></strong><br />
-						</td>
-
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="tiefS1"></strong><br />
-						</td>
-						
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="tiefS2"></strong><br />
-						</td>
-				</tr>
-
-				<tr>
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="finalS0"></strong><br />
-						</td>
-
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="finalS1"></strong><br />
-						</td>
-						
-						<td style="padding-left: 5px; padding-bottom: 3px;">
-							<strong style="font-size: 35px;" id="finalS2"></strong><br />
-						</td>
-				</tr>
-
-				<tr>
-					<td id="pokalS0"></td>
-					<td id="pokalS1"></td>
-					<td id="pokalS2"></td>
-				</tr>
-
-
-				</table>
-				
-				<script language="JavaScript">
-					initGameLogic();
-					//initScoreboard();//OLD
-				</script>
-			</form>
-			
-			<!-- 
-			<form action="" claas="debugText"> 
-				<input type="text" name="activePlayer" value="" size="40" readonly>
-			</form> -->
-			
-		</div>
-	</div> 
-	
-	
-	
-	
-	<div claas="debugText">
-		
-	</div>
-	
-		
-		
-		
 		<script language="JavaScript">
-		
-		if(document.layers) {
-		   window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
-		   else {
-			  document.onmousemove = MouseMove;
-		   }
+			initGameLogic();
+			//initScoreboard();//OLD
 		</script>
+	</div>
+
 		
+	<script language="JavaScript">
 		
-		
-		
+	if(document.layers) {
+		window.captureEvents(Event.MOUSEMOVE); window.onmousemove = MouseMove; }
+		else {
+			document.onmousemove = MouseMove;
+		}
+	</script>
 		
 		
 		
