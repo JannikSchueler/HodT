@@ -46,16 +46,17 @@ function initGameLogic(){
   scoreboard = new ScoreBoard(names, playsPerLeg, legsPerMode);
 
   scoreboard.players.forEach(player => {
-    document.getElementById("player"+player.id).textContent = player.name;
+    //document.getElementById("player"+player.id).textContent = player.name;
   });
 
   if(isDebug){console.log("scoreboard loaded!");}
   currentPlayer = scoreboard.GetPlayerById(scoreboard.GetRandomInt(0, scoreboard.players.length - 1));
   if(isDebug){console.log(currentPlayer.name + " has the power and responsibility to start!");}
-  document.getElementById("player" + currentPlayer.id).style.backgroundColor = currentPlayerColor;
-  document.getElementById("hoch" + (currentPlayer.legs + 1) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+  //document.getElementById("player" + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+  //document.getElementById("hoch" + (currentPlayer.legs + 1) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
 
   scoreboard.InitializeScoreBoard();
+  scoreboard.activePlayerID = currentPlayer.id;
   //scoreboard.DrawScoreBoard();
 }
 
@@ -90,12 +91,12 @@ function MouseClick(){
       currentPlayer.legs.push(currentPlayer.cLeg);
       DisplayLeg(currentPlayer.cLeg);
       if(currentPlayer.legs.length == 3){
-        document.getElementById("hochS" + currentPlayer.id).textContent = currentPlayer.SumHoch();
+        //document.getElementById("hochS" + currentPlayer.id).textContent = currentPlayer.SumHoch();
         scoreboard.AddScore(currentPlayer.id, currentPlayer.SumHoch(), 4);
       }else if(currentPlayer.legs.length == 6){
-        document.getElementById("tiefS" + currentPlayer.id).textContent = currentPlayer.SumTief();
+        //document.getElementById("tiefS" + currentPlayer.id).textContent = currentPlayer.SumTief();
         scoreboard.AddScore(currentPlayer.id, currentPlayer.SumTief(), 8);
-        document.getElementById("finalS" + currentPlayer.id).textContent = currentPlayer.FinalScore();
+        //document.getElementById("finalS" + currentPlayer.id).textContent = currentPlayer.FinalScore();
         scoreboard.AddScore(currentPlayer.id, currentPlayer.FinalScore(), 9);
         scoreboard.DrawImageCenter("lh1", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 3], "y");
         if(GameFinished() == true){
@@ -112,37 +113,41 @@ function MouseClick(){
 function NextPlayer(){ 
   legs = currentPlayer.legs.length;
   currentPlayer.cLeg = [];
-  document.getElementById("player" + currentPlayer.id).style.backgroundColor = backgroundColor;
+  //document.getElementById("player" + currentPlayer.id).style.backgroundColor = backgroundColor;
   
   if(legs < 4){
-    document.getElementById("hoch" + legs + currentPlayer.id).style.backgroundColor = backgroundColor;
+    //document.getElementById("hoch" + legs + currentPlayer.id).style.backgroundColor = backgroundColor;
   }else{
-    document.getElementById("tief" + (legs - 3) + currentPlayer.id).style.backgroundColor = backgroundColor;
+    //document.getElementById("tief" + (legs - 3) + currentPlayer.id).style.backgroundColor = backgroundColor;
   }
   
 
   currentPlayer = scoreboard.GetNextPlayer(currentPlayer.id);
   
   if(GameFinished() == false){
-    document.getElementById("player" + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+    //document.getElementById("player" + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+    scoreboard.activePlayerID = currentPlayer.id;
+    scoreboard.DrawActivePlayer();
+  }else{
+    scoreboard.ClearOverlay();
   }
   legs = currentPlayer.legs.length;
   if(legs < 3){
     console.log("hoch" + legs);
-    document.getElementById("hoch" + (legs + 1) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+    //document.getElementById("hoch" + (legs + 1) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
   }
   if(legs >= 3 && ((legs-2) < 4)){
     console.log("trying to mark: tief" + (legs - 2) + currentPlayer.id);
-    document.getElementById("tief" + (legs - 2) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
+    //document.getElementById("tief" + (legs - 2) + currentPlayer.id).style.backgroundColor = currentPlayerColor;
   }
 }
 
 function DisplayScore(){
   legs = currentPlayer.legs.length + 1;
   if(legs < 4){
-    document.getElementById("hoch" + legs + currentPlayer.id).textContent = currentPlayer.cLeg.join(" | ");
+    //document.getElementById("hoch" + legs + currentPlayer.id).textContent = currentPlayer.cLeg.join(" | ");
   }else{
-    document.getElementById("tief" + (legs - 3) + currentPlayer.id).textContent = currentPlayer.cLeg.join(" | ");
+    //document.getElementById("tief" + (legs - 3) + currentPlayer.id).textContent = currentPlayer.cLeg.join(" | ");
   }
   if(currentPlayer.cLeg.length == 1){
     old_scoreboard = scoreboard.ctx.getImageData(0, 0, scoreboard.width, scoreboard.height);
@@ -162,7 +167,7 @@ function DisplayLeg(leg){
         scoreboard.DrawImageCenter("lh3", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 1], "y");
       }
     }
-    document.getElementById("hoch" + legs + currentPlayer.id).textContent = currentPlayer.GetLegScore();
+    //document.getElementById("hoch" + legs + currentPlayer.id).textContent = currentPlayer.GetLegScore();
     scoreboard.AddScore(currentPlayer.id, currentPlayer.GetLegScore(), legs);
   }else{
     if(legCounter%scoreboard.players.length == 0){
@@ -170,6 +175,7 @@ function DisplayLeg(leg){
       if((legCounter/3) == 3){
         scoreboard.DrawImageCenter("lh2", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 1], "y");
         scoreboard.DrawImageCenter("lh3", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 2], "y");
+        scoreboard.DrawModeIdenticator("tief");
       }else if((legCounter/3) == 5){
         scoreboard.DrawImageCenter("lh2", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 2], "y");
         scoreboard.DrawImageCenter("lh1", 0, scoreboard.tableLinePos[legCounter/scoreboard.players.length + 3], "y");
@@ -178,7 +184,7 @@ function DisplayLeg(leg){
       }
       
     }
-    document.getElementById("tief" + (legs - 3) + currentPlayer.id).textContent = currentPlayer.GetLegScore();
+    //document.getElementById("tief" + (legs - 3) + currentPlayer.id).textContent = currentPlayer.GetLegScore();
     scoreboard.AddScore(currentPlayer.id, currentPlayer.GetLegScore(), legs + 1);
   }
 
@@ -192,7 +198,7 @@ function DisplayPrize(){
     img.src = 'img/platz' + (i+1) + '.svg';
     img.width = 100;
     //img.height = 150;
-    document.getElementById("pokalS" + sortedPlayers[i].id).appendChild(img);
+    //document.getElementById("pokalS" + sortedPlayers[i].id).appendChild(img);
     console.log( "scoreboard.DrawTrophy(" + sortedPlayers[i].id + ", " + (i+1) + ");");
     scoreboard.DrawTrophy(sortedPlayers[i].id, (i+1));
   }
